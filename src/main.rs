@@ -165,3 +165,48 @@ case i:Int=>println("int")
 case i:String=>println("String")
 case _=>println("other")
 }
+use std::fmt::Error;
+use std::{panic, io};
+use std::panic::AssertUnwindSafe;
+
+fn main(){
+//Result对象 try catch
+// enum Res<T,U>{
+// Ok(T),
+// Err(U)
+// }
+//println!("{}",usediv(4,0));
+    match usediv(1,0){
+        Ok(x) => {println!("{}",x)}
+        Err(e) => {e.printstacktrace()}
+    }
+    println!("ok");
+}
+struct MyErr{
+    s:String
+}
+impl MyErr{
+    fn printstacktrace(&self){
+        println!("{}",self.s);
+    }
+    fn new(s:&str)->Self{
+        Self{
+            s:s.to_string()
+        }
+    }
+}
+fn usediv(i:i32,j:i32)->Result<i32,MyErr>{
+    let res=div(i,j)?;
+// match res{
+// Ok(i) => Ok(i),
+// Err(e) => Err(e)
+// }
+    Ok(res)
+}
+fn div(i:i32,j:i32)->Result<i32,MyErr>{
+    if(j==0){
+        Err(MyErr::new("by zero"))
+    }else{
+        Ok(i/j)
+    }
+}
